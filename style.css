@@ -36,7 +36,7 @@
 }
 
 #home{
-  background: linear-gradient(rgba(0, 0, 0, 0.575)),url(/imgs/home\ .jpg);
+  background: linear-gradient(rgba(0, 0, 0, 0.575)),url(home\ .jpg);
   background-position: center;
   background-size: cover;
   height: 100vh;
@@ -262,3 +262,4 @@
   }
 }
     
+
