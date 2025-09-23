@@ -4,7 +4,6 @@
   padding-inline: 10px;
   border-radius: 50px !important;
 }
-
 .navbar-nav .nav-link {
   font-family: "Playpen Sans Arabic", cursive;
   font-weight: bold;
@@ -14,13 +13,11 @@
 .navbar-nav .nav-link:hover {
   color: #FDF4E3 !important;
 }
-
 .dropdown-menu {
   background-color: #FEB21A;
   margin-top: 20px !important;
   font-family: "Playpen Sans Arabic", cursive;
 }
-
 .dropdown-menu .dropdown-item {
   color: #0d335e;
 
@@ -39,7 +36,7 @@
 }
 
 #home{
-  background: linear-gradient(rgba(0, 0, 0, 0.575)),url(home\ .jpg);
+  background: linear-gradient(rgba(0, 0, 0, 0.575)),url(/imgs/home\ .jpg);
   background-position: center;
   background-size: cover;
   height: 100vh;
@@ -49,14 +46,35 @@
   min-height: 90vh;
   font-family: "Playpen Sans Arabic", cursive;
 }
-.home_contant h1{
+.home_contant h1 {
   color: #FDF4E3;
+  opacity: 0;
+  animation: home_contant 2s ease-in-out forwards;
 }
-.home_contant h2{
+
+.home_contant h2 {
   color: #FEB21A;
+  opacity: 0;
+  animation: home_contant 2s ease-in-out forwards;
+  animation-delay: 1s; 
 }
-.home_contant p{
+
+.home_contant p {
   color: #FDF4E3;
+  opacity: 0;
+  animation: home_contant 2s ease-in-out forwards;
+  animation-delay: 2s; 
+}
+
+@keyframes home_contant {
+  0% {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
 }
 
 .home_contant button{
@@ -109,8 +127,6 @@
     opacity: 0;
   }
 }
-
-
 #about{
   font-family: "Playpen Sans Arabic", cursive;
 }
@@ -120,17 +136,33 @@
 #about p{
   color: #0d335e;
 }
-#about img{
-  rotate: -5deg;
+#about img {
+  transform: rotate(-5deg);
   border: 10px solid #FEB21A;
   margin: 25px 0px;
-  transition: all 0.5s ;
+  transition: all 0.5s;
+  opacity: 0;
 }
-#about .about-yostos{
-  rotate: 5deg;
+
+#about .about-yostos {
+  transform: rotate(5deg);
   border: 10px solid #FEB21A;
   margin: 25px 0px;
-  transition: all 0.5s ;
+  transition: all 0.5s;
+  opacity: 0;
+}
+#about img.animate {
+  animation: about_photos 2s ease-in-out forwards;
+}
+@keyframes about_photos {
+  0% {
+    opacity: 0;
+    transform: rotateY(0deg); 
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(-5deg);
+  }
 }
 
 #about img:hover{
@@ -138,10 +170,45 @@
 }
 
 
+#count{
+  background-color:  #FEB21A;
+  font-family: "Playpen Sans Arabic", cursive;
+}
+#count p{
+  color: #0d335e;
+  font-family: "Playpen Sans Arabic", cursive;
+  font-size: 50px;
+}
 
 
+#ayat {
+  font-family: "Playpen Sans Arabic", cursive;
+  margin-block: 100px;
+}
+#ayat h1 {
+  color: #FEB21A;
+  opacity: 0;
+  transform: translateY(-50px); 
+}
+#ayat p {
+  color: #0d335e;
+  font-size: 40px;
+}
+#ayat h1.animate,
+#ayat p.animate {
+  animation: aya_an 2s ease-in-out forwards;
+}
 
-
+@keyframes aya_an {
+  0% {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 
 
@@ -194,5 +261,4 @@
     transform: translate(-50%, -5px);
   }
 }
-
     
