@@ -183,25 +183,35 @@
         </div>
       </div>
     </section>
-    <section id="alMosab2" class="text-center m-5 p-5">
+       <section id="alMosab2" class="text-center p-5">
       <h1 class="mb-5">مسابقة الأسرة الأسبوعية</h1>
       <div class="container">
-        <div class="row ">
-          <div class="col-md-5 d-flex flex-column gap-4 mt-3">
+        <div class="row">
+          <div class="col-md-5 d-flex flex-column gap-3 mt-3">
+
+            <!-- اختيار الاسم -->
+            <div class="mb-3">
+              <select id="boySelect" class="form-select">
+                <option value="" disabled selected>اختر اسمك</option>
+              </select>
+            </div>
+
+            <!-- زر بدء المسابقة -->
+            <button type="button" class="btn rounded-pill w-100" id="startQuizBtn" data-bs-toggle="modal"
+              data-bs-target="#quizModal" disabled>
+              ابدأ المسابقة
+            </button>
+
+            <!-- روابط القصة والفيديو -->
             <a href="https://st-takla.org/Bibles/BibleSearch/showChapter.php?book=1&chapter=1" target="_blank">
               <button class="btn rounded-pill w-100">قصة الخليقة من أصحاح 1 إلى 3</button>
             </a>
             <a href="https://youtu.be/fMkroA8cFcA?si=7Fxs6oXjVdux5anE" target="_blank">
-              <button class="btn rounded-pill w-100">فيديو القصة</button>
+              <button class="btn rounded-pill w-100 mb-5">فيديو القصة</button>
             </a>
-            <!-- زر فتح المسابقة -->
-            <button type="button" class="btn rounded-pill mb-3" id="quizBtn" data-bs-toggle="modal"
-              data-bs-target="#quizModal">
-              أسئلة الأصحاح
-            </button>
 
-            <!-- Modal -->
-            <div class="modal fade" id="quizModal" tabindex="-1" aria-labelledby="quizModalLabel" aria-hidden="true">
+            <!-- Modal المسابقة -->
+            <div class="modal fade " id="quizModal" tabindex="-1" aria-labelledby="quizModalLabel" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -223,7 +233,8 @@
             </div>
 
           </div>
-          <div class="col-md-6 text-end">
+
+          <div class="col-md-6 text-end mt-5">
             <h5 class="my-3">فكرة المسابقة الأسبوعية</h5>
             <p>كل أسبوع نختار موضوع مختلف من الإنجيل مثل قصة نوح، آدم، يوسف. نقرأ الأصحاح الخاص بالقصة جيدًا ثم نحل
               الأسئلة. إذا كانت كل الإجابات صحيحة، تُضاف نقاط للمسابقة الكبرى.</p>
@@ -231,7 +242,28 @@
         </div>
       </div>
     </section>
-
+    <section id="topBoys" class="m-5 rounded-5 pb-5">
+      <h1 class="text-center m-3 p-5">اكثر النقاط</h1>
+      <div class="container">
+        <div class="row text-center">
+          <div class="col-md-4 mb-3">
+            <i class="fs-1 fa-solid fa-child-reaching"></i>
+            <h1 class="top-name1"></h1>
+            <p class="top-scor1"></p>
+          </div>
+          <div class="col-md-4 mb-3">
+            <i class="fs-1 fa-solid fa-child-reaching"></i>
+            <h1 class="top-name2"></h1>
+            <p class="top-scor2"></p>
+          </div>
+          <div class="col-md-4 mb-3">
+            <i class="fs-1 fa-solid fa-child-reaching"></i>
+            <h1 class="top-name3"></h1>
+            <p class="top-scor3"></p>
+          </div>
+        </div>        
+      </div>
+    </section>
 
 
 
@@ -239,10 +271,11 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="main.js"></script>
+   <script type="module" src="main.js"></script>
 </body>
 
 </html>
+
 
 
 
