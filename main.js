@@ -1,4 +1,20 @@
-// العناصر الرئيسية
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
+
+// --------------------- إعداد Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyCNj0P9AgNazzEN86oLrMo0hzMg6E34R6U",
+  authDomain: "benjaminasham-9c7d2.firebaseapp.com",
+  projectId: "benjaminasham-9c7d2",
+  storageBucket: "benjaminasham-9c7d2.appspot.com",
+  messagingSenderId: "182864629177",
+  appId: "1:182864629177:web:65e67ae295ecdb6b84ba68",
+  measurementId: "G-8RHE4H5JYV"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// --------------------- عناصر عامة
 const count1 = document.getElementById("count1");
 const count2 = document.getElementById("count2");
 const al_aya = document.getElementById("al_aya");
@@ -7,7 +23,7 @@ const al_gwaiz = document.getElementById("al_gwaiz");
 const imgs = document.querySelectorAll("#about img, #ayat p");
 let started = false;
 
-// الآيات اليومية
+// --------------------- الآيات اليومية
 const ayat = [
   "«دَعُوا ٱلْأَوْلادَ يَأْتُونَ إِلَيَّ، وَلاَ تَمْنَعُوهُمْ» (مرقس 10:14)",
   "«ٱلرَّبُّ رَاعِيَّ فَلاَ يُعْوِزُنِي شَيْءٌ» (مزمور 23:1)",
@@ -16,7 +32,7 @@ const ayat = [
   "«كُلُّ مَا تَعْمَلُونَ، فَٱعْمَلُوا مِنَ ٱلْقَلْبِ كَمَا لِلرَّبِّ» (كولوسي 3:23)"
 ];
 
-// عداد الأرقام
+// --------------------- عداد الأرقام
 function counts() {
   let sum1 = 0, sum2 = 0;
   const interval = setInterval(() => {
@@ -26,7 +42,6 @@ function counts() {
   }, 350);
 }
 
-// تفعيل العداد عند الوصول للسكشن
 function startOnScroll() {
   window.addEventListener("scroll", () => {
     if (window.scrollY + window.innerHeight >= section.offsetTop && !started) {
@@ -36,52 +51,37 @@ function startOnScroll() {
   });
 }
 
-// عند تحميل الصفحة
-document.addEventListener("DOMContentLoaded", () => {
-  // عرض آية اليوم
-  const index = new Date().getDate() % ayat.length;
-  al_aya.textContent = ayat[index];
+// --------------------- عناصر المسابقة
+const boys = ["باسوتير سامح","روبن رامي","روجيه نشات","روجيه جورج","كيرلس رمسيس","ايفان هاني","هاني ايمن","مارك ايهاب","مارتن ماركو","ماثيو مينا","ماثيو حنا","مينا شنودة","مينا عماد","كاراس بسام","فيلوبتير مينا","يسى نسيم","بيشوي دميان","ادم ناجي"];
+const boySelect = document.getElementById('boySelect');
+const startQuizBtn = document.getElementById('startQuizBtn');
+let selectedBoy = null;
+let score = 0;
+let currentIndex = 0;
 
-  // إنشاء Observer لجميع العناصر المتحركة
-  const observer = new IntersectionObserver((entries, obs) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("animate");
-        obs.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.25 });
-
-  // مراقبة الصور والفقرات
-  imgs.forEach(el => observer.observe(el));
-
-  // مراقبة سكشن الجوائز
-  observer.observe(al_gwaiz);
-
-  // تفعيل العداد عند scroll
-  startOnScroll();
+// تعبئة السليكت
+boys.forEach(name => {
+  const option = document.createElement('option');
+  option.value = name;
+  option.textContent = name;
+  boySelect.appendChild(option);
 });
 
+boySelect.addEventListener('change', () => {
+  selectedBoy = boySelect.value;
+  startQuizBtn.disabled = false;
+});
 
-
-
-
-
-
-
-
-
-// أسئلة الأصحاح
+// أسئلة المسابقة
 const quiz = [
-  { q: "ماذا خلق الله في اليوم الأول؟", options: ["الشمس والقمر", "النور والفصل بين النور والظلام", "الحيوانات"], answer: 1 },
-  { q: "ماذا خلق الله في اليوم الثاني؟", options: ["السماء وفصل الماء", "اليابسة والنباتات", "الإنسان والحيوانات"], answer: 0 },
-  { q: "ماذا خلق الله في اليوم الثالث؟", options: ["الشمس والقمر", "اليابسة والنباتات", "النور والظلام"], answer: 1 },
-  { q: "ماذا خلق الله في اليوم الرابع؟", options: ["الشمس والقمر والنجوم", "الحيوانات", "النباتات"], answer: 0 },
-  { q: "ماذا خلق الله في اليوم السادس؟", options: ["الحيوانات والإنسان", "الشمس والقمر", "النور والظلام"], answer: 0 },
+  { q: "ماذا خلق الله في اليوم الأول؟", options: ["الشمس والقمر","النور والفصل بين النور والظلام","الحيوانات"], answer: 1 },
+  { q: "ماذا خلق الله في اليوم الثاني؟", options: ["السماء وفصل الماء","اليابسة والنباتات","الإنسان والحيوانات"], answer: 0 },
+  { q: "ماذا خلق الله في اليوم الثالث؟", options: ["الشمس والقمر","اليابسة والنباتات","النور والظلام"], answer: 1 },
+  { q: "ماذا خلق الله في اليوم الرابع؟", options: ["الشمس والقمر والنجوم","الحيوانات","النباتات"], answer: 0 },
+  { q: "ماذا خلق الله في اليوم السادس؟", options: ["الحيوانات والإنسان","الشمس والقمر","النور والظلام"], answer: 0 },
+  { q: "من خلق السماء والأرض؟", options: ["الله","موسى","نوح","يوسف"], answer: 0 },
+  { q: "كم يومًا استغرقت الخلق؟", options: ["5 أيام","6 أيام","7 أيام","4 أيام"], answer: 1 }
 ];
-
-let currentIndex = 0;
-let score = 0;
 
 // عناصر المودال
 const questionEl = document.getElementById("question");
@@ -90,14 +90,27 @@ const feedbackEl = document.getElementById("feedback");
 const scoreEl = document.getElementById("score");
 const closeQuizBtn = document.getElementById("closeQuiz");
 
-// عرض سؤال
-function showQuestion(index){
-  const q = quiz[index];
+// --------------------- حفظ النقاط في Firebase
+async function saveScore(studentName, score) {
+  try {
+    await addDoc(collection(db, "quiz_scores"), {
+      name: studentName,
+      score: score,
+      date: new Date()
+    });
+  } catch (e) {
+    console.error("حدث خطأ في الحفظ:", e);
+  }
+}
+
+// --------------------- عرض السؤال والتحقق
+function showQuestion() {
+  if(currentIndex >= quiz.length) return;
+  const q = quiz[currentIndex];
   questionEl.textContent = q.q;
   optionsEl.innerHTML = "";
   feedbackEl.textContent = "";
   scoreEl.textContent = `النقاط: ${score}`;
-
   q.options.forEach((opt, i) => {
     const btn = document.createElement("button");
     btn.textContent = opt;
@@ -107,8 +120,7 @@ function showQuestion(index){
   });
 }
 
-// التحقق من الإجابة
-function checkAnswer(selected){
+function checkAnswer(selected) {
   const correct = quiz[currentIndex].answer;
   if(selected === correct){
     feedbackEl.textContent = "✅ صحيح!";
@@ -118,25 +130,18 @@ function checkAnswer(selected){
   }
 
   scoreEl.textContent = `النقاط: ${score}`;
+  currentIndex++;
 
-  // الانتقال للسؤال التالي بعد ثانية
-  setTimeout(() => {
-    currentIndex++;
-    if(currentIndex < quiz.length){
-      showQuestion(currentIndex);
-    } else {
-      feedbackEl.textContent = `🎉 انتهت المسابقة! مجموع نقاطك: ${score} من ${quiz.length}`;
+  if(currentIndex < quiz.length){
+    setTimeout(showQuestion, 1000);
+  } else {
+    setTimeout(() => {
+      feedbackEl.textContent = `🎉 انتهت المسابقة! ${selectedBoy} حصل على ${score} نقاط من ${quiz.length}.`;
       optionsEl.innerHTML = "";
-    }
-  }, 1000);
+      saveScore(selectedBoy, score);
+    }, 1000);
+  }
 }
-
-// بدء المسابقة عند فتح المودال
-document.getElementById("quizBtn").addEventListener("click", () => {
-  currentIndex = 0;
-  score = 0;
-  showQuestion(currentIndex);
-});
 
 // إعادة ضبط النقاط عند إغلاق المودال
 closeQuizBtn.addEventListener("click", () => {
@@ -145,4 +150,62 @@ closeQuizBtn.addEventListener("click", () => {
   feedbackEl.textContent = "";
   optionsEl.innerHTML = "";
   scoreEl.textContent = "";
+});
+
+startQuizBtn.addEventListener("click", () => {
+  currentIndex = 0;
+  score = 0;
+  showQuestion();
+});
+
+// --------------------- Leaderboard مباشر (Top 3)
+const topNames = [
+  document.querySelector(".top-name1"),
+  document.querySelector(".top-name2"),
+  document.querySelector(".top-name3")
+];
+const topScores = [
+  document.querySelector(".top-scor1"),
+  document.querySelector(".top-scor2"),
+  document.querySelector(".top-scor3")
+];
+
+function loadTopScoresRealtime() {
+  try {
+    const q = query(collection(db, "quiz_scores"), orderBy("score", "desc"), limit(3));
+    onSnapshot(q, (snapshot) => {
+      const topBoys = [];
+      snapshot.forEach(doc => topBoys.push(doc.data()));
+
+      topBoys.forEach((boy, i) => {
+        if(topNames[i]) topNames[i].textContent = boy.name;
+        if(topScores[i]) topScores[i].textContent = `النقاط: ${boy.score}`;
+      });
+    });
+  } catch (e) {
+    console.error("خطأ في جلب أعلى النقاط:", e);
+  }
+}
+
+// --------------------- عند تحميل الصفحة
+document.addEventListener("DOMContentLoaded", () => {
+  // عرض الآية اليومية
+  const index = new Date().getDate() % ayat.length;
+  al_aya.textContent = ayat[index];
+
+  // انيميشن الصور والنصوص
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("animate");
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.25 });
+
+  imgs.forEach(el => observer.observe(el));
+  observer.observe(al_gwaiz);
+
+  startOnScroll();
+  loadTopScoresRealtime();
 });
