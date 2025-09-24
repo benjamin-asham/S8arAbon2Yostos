@@ -36,7 +36,7 @@
 }
 
 #home{
-  background: linear-gradient(rgba(0, 0, 0, 0.575)),url(home\ .jpg);
+  background: linear-gradient(rgba(0, 0, 0, 0.575)),url(/imgs/home\ .jpg);
   background-position: center;
   background-size: cover;
   height: 100vh;
@@ -165,11 +165,6 @@
   }
 }
 
-#about img:hover{
-  rotate: 0deg;
-}
-
-
 #count{
   background-color:  #FEB21A;
   font-family: "Playpen Sans Arabic", cursive;
@@ -187,12 +182,11 @@
 }
 #ayat h1 {
   color: #FEB21A;
-  opacity: 0;
   transform: translateY(-50px); 
 }
 #ayat p {
   color: #0d335e;
-  font-size: 40px;
+  font-size: 30px;
 }
 #ayat h1.animate,
 #ayat p.animate {
@@ -209,6 +203,64 @@
     transform: translateY(0);
   }
 }
+
+
+#al_gwaiz{
+  background:linear-gradient(#0d335eaf),url(/imgs/mirAlshohds.jpg);
+  font-family: "Playpen Sans Arabic", cursive;
+  color: #FDF4E3;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0;
+}
+#al_gwaiz.animate {
+  animation: al_gwaiz_an 1.5s ease forwards;
+}
+@keyframes al_gwaiz_an{
+  0% {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#alMosab2 h1 , #alMosab2 p{
+  animation: al_gwaiz_an 1.5s ease forwards;
+}
+#alMosab2 button{
+  background-color: #FEB21A;
+  color: #0d335e;
+  border: none;
+  animation: al_gwaiz_an 1.5s ease forwards;
+  transition: all 0.5s;
+}
+#alMosab2 button:hover{
+  background-color: #0d335e;
+  color: #FEB21A;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -262,4 +314,15 @@
   }
 }
     
+
+
+
+
+
+
+
+
+
+
+
 
