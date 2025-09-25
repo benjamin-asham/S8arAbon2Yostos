@@ -53,6 +53,7 @@ function startOnScroll() {
 
 // --------------------- عناصر المسابقة
 const boys = ["باسوتير سامح","روبن رامي","روجيه نشات","روجيه جورج","كيرلس رمسيس","ايفان هاني","هاني ايمن","مارك ايهاب","مارتن ماركو","ماثيو مينا","ماثيو حنا","مينا شنودة","مينا عماد","كاراس بسام","فيلوبتير مينا","يسى نسيم","بيشوي دميان","ادم ناجي"];
+boys.sort((a, b) => a.localeCompare(b, 'ar')); 
 const boySelect = document.getElementById('boySelect');
 const startQuizBtn = document.getElementById('startQuizBtn');
 let selectedBoy = null;
@@ -91,17 +92,26 @@ const scoreEl = document.getElementById("score");
 const closeQuizBtn = document.getElementById("closeQuiz");
 
 // --------------------- حفظ النقاط في Firebase
+import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
+
+// حفظ النقاط + جمعها مع القديم
 async function saveScore(studentName, score) {
   try {
-    await addDoc(collection(db, "quiz_scores"), {
-      name: studentName,
-      score: score,
-      date: new Date()
-    });
+    const ref = doc(db, "quiz_scores", studentName); 
+    const snap = await getDoc(ref);
+
+    let newScore = score;
+    if (snap.exists()) {
+      const oldScore = snap.data().score || 0;
+      newScore = oldScore + score; // يضيف على الموجود
+    }
+
+    await setDoc(ref, { name: studentName, score: newScore });
   } catch (e) {
     console.error("حدث خطأ في الحفظ:", e);
   }
 }
+
 
 // --------------------- عرض السؤال والتحقق
 function showQuestion() {
@@ -209,3 +219,6 @@ document.addEventListener("DOMContentLoaded", () => {
   startOnScroll();
   loadTopScoresRealtime();
 });
+
+
+
