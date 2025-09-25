@@ -90,24 +90,36 @@
 
 
 
-  <script>
-    document.getElementById("loginForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const email = document.getElementById("email").value;
-      const pass = document.getElementById("password").value;
-  
-      // بيانات تسجيل الدخول (ممكن تغيرها)
-if (
-  (email === "benjamin@abonayoustos" && pass === "12345") ||
-  (email === "esameh309@abonayoustos" && pass === "12345")
-) {
-  localStorage.setItem("loggedIn", "true");
-  window.location.href = "dashboard.html"; // يوديك لجدول النقاط
-} else {
-  alert("البريد أو كلمة المرور غير صحيحة");
-}
-    });
-  </script>
+<script>
+document.getElementById("loginForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  // ناخد القيم وننضفها
+  const email = document.getElementById("email").value.trim().toLowerCase();
+  const pass = document.getElementById("password").value.trim();
+
+  // لطباعة للتصحيح في الـ Console
+  console.log("Attempt login with:", { email, pass });
+
+  // بيانات تسجيل الدخول الصحيحة — عدّل الإيميلات لو كنت تقصد @gmail.com
+  const validUsers = {
+    "benjamin@abonayoustos": "12345",
+    "esameh309@abonayoustos": "12345"
+    // لو كنت تقصد gmail: "esameh309@gmail.com": "12345"
+  };
+
+  if (validUsers[email] && validUsers[email] === pass) {
+    localStorage.setItem("loggedIn", "true");
+    localStorage.setItem("userEmail", email);
+    // تأكد إن dashboard.html موجودة بالمسار ده
+    window.location.href = "dashboard.html";
+  } else {
+    alert("البريد أو كلمة المرور غير صحيحة");
+    // طباعة إضافية للمساعدة في التصحيح
+    console.warn("Login failed for:", email);
+  }
+});
+</script>
 
 
 
@@ -117,6 +129,7 @@ if (
 </body>
 
 </html>
+
 
 
 
