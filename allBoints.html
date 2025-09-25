@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>جدول النقاط</title>
+  <link rel="shortcut icon" href="/imgs/Christian favicon.jpeg" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Playpen+Sans+Arabic:wght@100..800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav id="nav" class="navbar navbar-expand-lg mt-3 p-0" style="background-color:#FEB21A;">
+    <div class="container">
+      <a class="navbar-brand fs-3" href="index.html">
+        <i class="fa-solid fa-church"></i>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link text-light active" aria-current="page" href="index.html">الصفة الرئيسية</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="index.html#alMosab2">مسابقة الأسرة</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="index.html#about">عن الاسرة</a>
+          </li>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container my-5" style="font-family:Playpen Sans Arabic,cursive;color: #0d335e;">
+    <h2 class="text-center mb-4">جدول نقط مسابقة الأسرة</h2>
+    <table id="boysTable" class="table table-striped table-bordered shadow">
+      <thead class="table-warning">
+        <tr>
+          <th>الترتيب</th>
+          <th>الاسم</th>
+          <th>النقاط</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+        <!-- Footer -->
+        <footer class="text-center py-3 mt-5" style="background-color:#FEB21A; color:#fff;">
+          <p class="mb-0 fs-6">
+            &copy; 2025 أسرة أبونا يسطس الأنطوني والقديس يوسف الصديق - كنيسة الشهيد العظيم مارجرجس
+            <br> by | eng | Benjamin
+          </p>
+        </footer>
+  </main>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+    import { getFirestore, collection, doc, setDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
+
+    // ----------------- تحقق من تسجيل الدخول
+    // if(!localStorage.getItem("loggedIn")){
+    //   window.location.href = "login.html";
+    // }
+
+    // ----------------- إعداد Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCNj0P9AgNazzEN86oLrMo0hzMg6E34R6U",
+      authDomain: "benjaminasham-9c7d2.firebaseapp.com",
+      projectId: "benjaminasham-9c7d2",
+      storageBucket: "benjaminasham-9c7d2.appspot.com",
+      messagingSenderId: "182864629177",
+      appId: "1:182864629177:web:65e67ae295ecdb6b84ba68",
+      measurementId: "G-8RHE4H5JYV"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // ----------------- أسماء الأولاد
+    const boys = ["باسوتير سامح","روبن رامي","روجيه نشات","روجيه جورج","كيرلس رمسيس","ايفان هاني","هاني ايمن","مارك ايهاب","مارتن ماركو","ماثيو مينا","ماثيو حنا","مينا شنودة","مينا عماد","كاراس بسام","فيلوبتير مينا","يسى نسيم","بيشوي دميان","ادم ناجي"];
+    boys.sort((a, b) => a.localeCompare(b, 'ar')); 
+
+    const tableBody = document.querySelector("#boysTable tbody");
+
+    // ----------------- تحميل النقاط من Firebase
+    async function loadScores() {
+      const querySnapshot = await getDocs(collection(db, "quiz_scores"));
+      const scoresMap = {};
+      querySnapshot.forEach(doc => {
+        const data = doc.data();
+        scoresMap[data.name] = data.score;
+      });
+
+      tableBody.innerHTML = "";
+      boys.forEach((name, index) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${name}</td>
+          <td contenteditable="true" class="score-cell">${scoresMap[name] || 0}</td>
+        `;
+        tableBody.appendChild(tr);
+
+        // حفظ التعديل عند الخروج من الخلية
+        tr.querySelector(".score-cell").addEventListener("blur", async (e) => {
+          const newScore = parseInt(e.target.textContent) || 0;
+          await setDoc(doc(db, "quiz_scores", name), {
+            name: name,
+            score: newScore
+          });
+        });
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", loadScores);
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
