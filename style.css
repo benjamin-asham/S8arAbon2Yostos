@@ -36,7 +36,7 @@
 }
 
 #home{
-  background: linear-gradient(rgba(0, 0, 0, 0.575)),url(/imgs/home\ .jpg);
+  background: linear-gradient(rgba(0, 0, 0, 0.575)),url(home\ .jpg);
   background-position: center;
   background-size: cover;
   height: 100vh;
@@ -206,7 +206,7 @@
 
 
 #al_gwaiz{
-  background:linear-gradient(#0d335eaf),url(/imgs/mirAlshohds.jpg);
+  background:linear-gradient(#0d335eaf),url(mirAlshohds.jpg);
   font-family: "Playpen Sans Arabic", cursive;
   color: #FDF4E3;
   background-position: center;
@@ -317,6 +317,7 @@
   font-family: "Playpen Sans Arabic", cursive;
   color: #FDF4E3;
 }
+
 
 
 
