@@ -106,12 +106,13 @@ document.getElementById("loginForm").addEventListener("submit", (e) => {
   const pass = document.getElementById("password").value.trim();
 
   // بيانات تسجيل الدخول الصحيحة
-  const validUsers = {
-    "benjamin@abonayoustos": "12345",
-    "esameh309@abonayoustos": "12345",
-    "fady@abonayoustos": "12345",
-    "youssef@abonayoustos": "12345"
-  };
+const validUsers = {
+  "benjamin@abonayoustos": "12345",
+  "esameh309@abonayoustos": "12345",
+  "fady@abonayoustos": "12345",
+  "youssef@abonayoustos": "12345"
+};
+
 
   // التحقق
   if (validUsers[email] && validUsers[email] === pass) {
@@ -133,6 +134,7 @@ document.getElementById("loginForm").addEventListener("submit", (e) => {
 </body>
 
 </html>
+
 
 
 
