@@ -105,28 +105,25 @@ document.getElementById("loginForm").addEventListener("submit", (e) => {
   const email = document.getElementById("email").value.trim().toLowerCase();
   const pass = document.getElementById("password").value.trim();
 
-  // لطباعة للتصحيح في الـ Console
-  console.log("Attempt login with:", { email, pass });
-
+  // بيانات تسجيل الدخول الصحيحة
   const validUsers = {
     "benjamin@abonayoustos": "12345",
-    "emad@abonayoustos": "12345",
-    "youssef@abonayoustos": "12345",
-    "fady@abonayoustos": "12345"
+    "esameh309@abonayoustos": "12345",
+    "fady@abonayoustos": "12345",
+    "youssef@abonayoustos": "12345"
   };
 
+  // التحقق
   if (validUsers[email] && validUsers[email] === pass) {
     localStorage.setItem("loggedIn", "true");
     localStorage.setItem("userEmail", email);
-    // تأكد إن dashboard.html موجودة بالمسار ده
-    window.location.href = "dashboard.html";
+    window.location.href = "dashboard.html"; 
   } else {
     alert("البريد أو كلمة المرور غير صحيحة");
-    // طباعة إضافية للمساعدة في التصحيح
-    console.warn("Login failed for:", email);
   }
 });
 </script>
+
 
 
 
@@ -136,6 +133,7 @@ document.getElementById("loginForm").addEventListener("submit", (e) => {
 </body>
 
 </html>
+
 
 
 
