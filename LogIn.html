@@ -108,11 +108,11 @@ document.getElementById("loginForm").addEventListener("submit", (e) => {
   // لطباعة للتصحيح في الـ Console
   console.log("Attempt login with:", { email, pass });
 
-  // بيانات تسجيل الدخول الصحيحة — عدّل الإيميلات لو كنت تقصد @gmail.com
   const validUsers = {
     "benjamin@abonayoustos": "12345",
-    "esameh309@abonayoustos": "12345"
-    // لو كنت تقصد gmail: "esameh309@gmail.com": "12345"
+    "emad@abonayoustos": "12345",
+    "youssef@abonayoustos": "12345",
+    "fady@abonayoustos": "12345"
   };
 
   if (validUsers[email] && validUsers[email] === pass) {
@@ -136,6 +136,7 @@ document.getElementById("loginForm").addEventListener("submit", (e) => {
 </body>
 
 </html>
+
 
 
 
