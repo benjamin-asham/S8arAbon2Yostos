@@ -59,16 +59,10 @@
   </main>
 
   <!-- Firebase -->
-  <script type="module">
+   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-    import { getFirestore, collection, doc, setDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
-
-    // ----------------- تحقق من تسجيل الدخول
-    // if(!localStorage.getItem("loggedIn")){
-    //   window.location.href = "login.html";
-    // }
-
-    // ----------------- إعداد Firebase
+    import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
+    
     const firebaseConfig = {
       apiKey: "AIzaSyCNj0P9AgNazzEN86oLrMo0hzMg6E34R6U",
       authDomain: "benjaminasham-9c7d2.firebaseapp.com",
@@ -80,47 +74,45 @@
     };
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-
-    // ----------------- أسماء الأولاد
-    const boys = ["باسوتير سامح","روبن رامي","روجيه نشات","روجيه جورج","كيرلس رمسيس","ايفان هاني","هاني ايمن","مارك ايهاب","مارتن ماركو","ماثيو مينا","ماثيو حنا","مينا شنودة","مينا عماد","كاراس بسام","فيلوبتير مينا","يسى نسيم","بيشوي دميان","ادم ناجي"];
+    
+    const boys = ["باسوتير سامح","روبن رامي","روجيه نشات","روجيه جورج","كيرلس رمسيس","ايفان هاني",
+    "هاني ايمن","مارك ايهاب","مارتن ماركو","ماثيو مينا","ماثيو حنا","مينا شنودة",
+    "مينا عماد","كاراس بسام","فيلوبتير مينا","يسى نسيم","بيشوي دميان","ادم ناجي"];
+    
     boys.sort((a, b) => a.localeCompare(b, 'ar')); 
-
     const tableBody = document.querySelector("#boysTable tbody");
-
-    // ----------------- تحميل النقاط من Firebase
-    async function loadScores() {
-      const querySnapshot = await getDocs(collection(db, "quiz_scores"));
-      const scoresMap = {};
-      querySnapshot.forEach(doc => {
-        const data = doc.data();
-        scoresMap[data.name] = data.score;
-      });
-
-      tableBody.innerHTML = "";
-      boys.forEach((name, index) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${index + 1}</td>
-          <td>${name}</td>
-          <td contenteditable="true" class="score-cell">${scoresMap[name] || 0}</td>
-        `;
-        tableBody.appendChild(tr);
-
-        // حفظ التعديل عند الخروج من الخلية
-        tr.querySelector(".score-cell").addEventListener("blur", async (e) => {
-          const newScore = parseInt(e.target.textContent) || 0;
-          await setDoc(doc(db, "quiz_scores", name), {
-            name: name,
-            score: newScore
-          });
+    
+    function loadScoresRealtime() {
+      onSnapshot(collection(db, "quiz_scores"), (snapshot) => {
+        const scoresMap = {};
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          scoresMap[data.name] = data.score;
+        });
+    
+        tableBody.innerHTML = "";
+    
+        const boysData = boys.map(name => ({
+          name,
+          score: scoresMap[name] || 0
+        })).sort((a, b) => b.score - a.score);
+    
+        boysData.forEach((boy, index) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${boy.name}</td>
+            <td>${boy.score}</td>
+          `;
+          tableBody.appendChild(tr);
         });
       });
     }
-
-    document.addEventListener("DOMContentLoaded", loadScores);
-  </script>
+    document.addEventListener("DOMContentLoaded", loadScoresRealtime);
+    </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
 
