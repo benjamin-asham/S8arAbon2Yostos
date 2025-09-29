@@ -39,7 +39,7 @@ function counts() {
     if (sum1 < 18) count1.textContent = ++sum1;
     if (sum2 < 4) count2.textContent = ++sum2;
     if (sum1 >= 18 && sum2 >= 4) clearInterval(interval);
-  }, 350);
+  }, 250);
 }
 
 function startOnScroll() {
@@ -52,7 +52,7 @@ function startOnScroll() {
 }
 
 // --------------------- عناصر المسابقة
-const boys = ["باسوتير سامح","روبن رامي","روجيه نشات","روجيه جورج","كيرلس رمسيس","ايفان هاني","هاني ايمن","مارك ايهاب","مارتن ماركو","ماثيو مينا","ماثيو حنا","مينا شنودة","مينا عماد","كاراس بسام","فيلوبتير مينا","يسى نسيم","بيشوي دميان","ادم ناجي"];
+const boys = ["باسوتير سامح","روبن رامي","روجيه نشات","روجيه جورج","كيرلس رمسيس","ايفان هاني","هاني ايمن","مارك ايهاب","مارتن ماركو","ماثيو مينا","ماثيو حنا","مينا شنودة","مينا عماد","كاراس بسام","فيلوبتير مينا","يسى نسيم","بيشوي دميان","ادم ناجي","test" و];
 boys.sort((a, b) => a.localeCompare(b, 'ar')); 
 const boySelect = document.getElementById('boySelect');
 const startQuizBtn = document.getElementById('startQuizBtn');
@@ -219,6 +219,7 @@ document.addEventListener("DOMContentLoaded", () => {
   startOnScroll();
   loadTopScoresRealtime();
 });
+
 
 
 
