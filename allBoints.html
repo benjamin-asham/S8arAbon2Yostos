@@ -82,9 +82,9 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     
-    const boys = ["باسوتير سامح","روبن رامي","روجيه نشات","روجيه جورج","كيرلس رمسيس","ايفان هاني",
+ const boys = ["باسوتير سامح","روبن رامي","روجيه نشات","روجيه جورج","كيرلس رمسيس","ايفان هاني",
     "هاني ايمن","مارك ايهاب","مارتن ماركو","ماثيو مينا","ماثيو حنا","مينا شنودة",
-    "مينا عماد","كاراس بسام","فيلوبتير مينا","يسى نسيم","بيشوي دميان","ادم ناجي"];
+    "مينا عماد","كاراس بسام","فيلوبتير مينا","يسى نسيم","بيشوي دميان","ادم ناجي" , "test"];
     
     boys.sort((a, b) => a.localeCompare(b, 'ar')); 
     const tableBody = document.querySelector("#boysTable tbody");
@@ -121,6 +121,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
 
 
 
