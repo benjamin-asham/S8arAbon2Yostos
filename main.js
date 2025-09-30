@@ -1,5 +1,9 @@
+// --------------------- استيراد Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
+import { 
+  getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot, 
+  doc, setDoc, getDoc 
+} from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
 
 // --------------------- إعداد Firebase
 const firebaseConfig = {
@@ -39,9 +43,8 @@ function counts() {
     if (sum1 < 18) count1.textContent = ++sum1;
     if (sum2 < 4) count2.textContent = ++sum2;
     if (sum1 >= 18 && sum2 >= 4) clearInterval(interval);
-  }, 250);
+  }, 350);
 }
-
 function startOnScroll() {
   window.addEventListener("scroll", () => {
     if (window.scrollY + window.innerHeight >= section.offsetTop && !started) {
@@ -52,8 +55,14 @@ function startOnScroll() {
 }
 
 // --------------------- عناصر المسابقة
-const boys = ["باسوتير سامح","روبن رامي","روجيه نشات","روجيه جورج","كيرلس رمسيس","ايفان هاني","هاني ايمن","مارك ايهاب","مارتن ماركو","ماثيو مينا","ماثيو حنا","مينا شنودة","مينا عماد","كاراس بسام","فيلوبتير مينا","يسى نسيم","بيشوي دميان","ادم ناجي","test"];
+const boys = [
+  "باسوتير سامح","روبن رامي","روجيه نشات","روجيه جورج","كيرلس رمسيس",
+  "ايفان هاني","هاني ايمن","مارك ايهاب","مارتن ماركو","ماثيو مينا","ماثيو حنا",
+  "مينا شنودة","مينا عماد","كاراس بسام","فيلوبتير مينا","يسى نسيم",
+  "بيشوي دميان","ادم ناجي","test"
+];
 boys.sort((a, b) => a.localeCompare(b, 'ar')); 
+
 const boySelect = document.getElementById('boySelect');
 const startQuizBtn = document.getElementById('startQuizBtn');
 let selectedBoy = null;
@@ -67,13 +76,12 @@ boys.forEach(name => {
   option.textContent = name;
   boySelect.appendChild(option);
 });
-
 boySelect.addEventListener('change', () => {
   selectedBoy = boySelect.value;
   startQuizBtn.disabled = false;
 });
 
-// أسئلة المسابقة
+// --------------------- أسئلة المسابقة
 const quiz = [
   { q: "ماذا خلق الله في اليوم الأول؟", options: ["الشمس والقمر","النور والفصل بين النور والظلام","الحيوانات"], answer: 1 },
   { q: "ماذا خلق الله في اليوم الثاني؟", options: ["السماء وفصل الماء","اليابسة والنباتات","الإنسان والحيوانات"], answer: 0 },
@@ -84,34 +92,41 @@ const quiz = [
   { q: "كم يومًا استغرقت الخلق؟", options: ["5 أيام","6 أيام","7 أيام","4 أيام"], answer: 1 }
 ];
 
-// عناصر المودال
+// --------------------- عناصر المودال
 const questionEl = document.getElementById("question");
 const optionsEl = document.getElementById("options");
 const feedbackEl = document.getElementById("feedback");
 const scoreEl = document.getElementById("score");
 const closeQuizBtn = document.getElementById("closeQuiz");
 
-// --------------------- حفظ النقاط في Firebase
-import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore.js";
-
-// حفظ النقاط + جمعها مع القديم
+// --------------------- الحفظ في Firebase
 async function saveScore(studentName, score) {
   try {
     const ref = doc(db, "quiz_scores", studentName); 
-    const snap = await getDoc(ref);
-
-    let newScore = score;
-    if (snap.exists()) {
-      const oldScore = snap.data().score || 0;
-      newScore = oldScore + score; // يضيف على الموجود
-    }
-
-    await setDoc(ref, { name: studentName, score: newScore });
+    await setDoc(ref, { 
+      name: studentName, 
+      score: score,
+      lastPlayed: new Date().toISOString()
+    }, { merge: true });
   } catch (e) {
     console.error("حدث خطأ في الحفظ:", e);
   }
 }
 
+async function canPlay(studentName) {
+  const ref = doc(db, "quiz_scores", studentName);
+  const snap = await getDoc(ref);
+
+  if (!snap.exists()) return true;
+  const data = snap.data();
+  if (!data.lastPlayed) return true;
+
+  const lastPlayed = new Date(data.lastPlayed);
+  const now = new Date();
+  const diffDays = (now - lastPlayed) / (1000 * 60 * 60 * 24);
+
+  return diffDays >= 7;
+}
 
 // --------------------- عرض السؤال والتحقق
 function showQuestion() {
@@ -121,6 +136,7 @@ function showQuestion() {
   optionsEl.innerHTML = "";
   feedbackEl.textContent = "";
   scoreEl.textContent = `النقاط: ${score}`;
+
   q.options.forEach((opt, i) => {
     const btn = document.createElement("button");
     btn.textContent = opt;
@@ -153,7 +169,7 @@ function checkAnswer(selected) {
   }
 }
 
-// إعادة ضبط النقاط عند إغلاق المودال
+// --------------------- إعادة ضبط عند إغلاق المودال
 closeQuizBtn.addEventListener("click", () => {
   currentIndex = 0;
   score = 0;
@@ -162,7 +178,19 @@ closeQuizBtn.addEventListener("click", () => {
   scoreEl.textContent = "";
 });
 
-startQuizBtn.addEventListener("click", () => {
+// --------------------- بدء المسابقة مع تحقق 7 أيام
+startQuizBtn.addEventListener("click", async () => {
+  if (!selectedBoy) return;
+
+  const allowed = await canPlay(selectedBoy);
+  if (!allowed) {
+    feedbackEl.textContent = `⚠️ ${selectedBoy} لقد شاركت بالفعل هذا الأسبوع، انتظر المسابقة القادمة.`;
+    questionEl.textContent = "";
+    optionsEl.innerHTML = "";
+    scoreEl.textContent = "";
+    return;
+  }
+
   currentIndex = 0;
   score = 0;
   showQuestion();
@@ -199,11 +227,9 @@ function loadTopScoresRealtime() {
 
 // --------------------- عند تحميل الصفحة
 document.addEventListener("DOMContentLoaded", () => {
-  // عرض الآية اليومية
   const index = new Date().getDate() % ayat.length;
   al_aya.textContent = ayat[index];
 
-  // انيميشن الصور والنصوص
   const observer = new IntersectionObserver((entries, obs) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -219,8 +245,3 @@ document.addEventListener("DOMContentLoaded", () => {
   startOnScroll();
   loadTopScoresRealtime();
 });
-
-
-
-
-
