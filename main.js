@@ -184,7 +184,7 @@ startQuizBtn.addEventListener("click", async () => {
 
   const allowed = await canPlay(selectedBoy);
   if (!allowed) {
-    feedbackEl.textContent = `⚠️ ${selectedBoy} لقد شاركت بالفعل هذا الأسبوع، انتظر المسابقة القادمة.`;
+    feedbackEl.textContent = `⚠️ ${selectedBoy} انت حليت المسابقه الاسبوه دا استني مسابقه الاسبوع الي جي .`;
     questionEl.textContent = "";
     optionsEl.innerHTML = "";
     scoreEl.textContent = "";
@@ -245,3 +245,4 @@ document.addEventListener("DOMContentLoaded", () => {
   startOnScroll();
   loadTopScoresRealtime();
 });
+
