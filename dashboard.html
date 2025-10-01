@@ -50,13 +50,14 @@
       </thead>
       <tbody></tbody>
     </table>
-        <!-- Footer -->
-        <footer class="text-center py-3 mt-5" style="background-color:#FEB21A; color:#fff;">
-          <p class="mb-0 fs-6">
-            &copy; 2025 أسرة أبونا يسطس الأنطوني والقديس يوسف الصديق - كنيسة الشهيد العظيم مارجرجس
-            <br> by | eng | Benjamin
-          </p>
-        </footer>
+
+    <!-- Footer -->
+    <footer class="text-center py-3 mt-5" style="background-color:#FEB21A; color:#fff;">
+      <p class="mb-0 fs-6">
+        &copy; 2025 أسرة أبونا يسطس الأنطوني والقديس يوسف الصديق - كنيسة الشهيد العظيم مارجرجس
+        <br> by | eng | Benjamin
+      </p>
+    </footer>
   </main>
 
   <!-- Firebase -->
@@ -86,7 +87,7 @@
     const boys = [
       "باسوتير سامح","روبن رامي","روجيه نشات","روجيه جورج","كيرلس رمسيس","ايفان هاني",
       "هاني ايمن","مارك ايهاب","مارتن ماركو","ماثيو مينا","ماثيو حنا","مينا شنودة",
-      "مينا عماد","كاراس بسام","فيلوبتير مينا","يسى نسيم","بيشوي دميان","ادم ناجي" , "test"
+      "مينا عماد","كاراس بسام","فيلوبتير مينا","يسى نسيم","بيشوي دميان","ادم ناجي","test"
     ];
     boys.sort((a, b) => a.localeCompare(b, 'ar'));
 
@@ -107,18 +108,20 @@
           const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>${index + 1}</td>
-            <td>${name}<td class="text-center">
-  <button class="btn btn-sm btn-success me-2 plus">+</button>
-  <span class="score fw-bold">${score}</span>
-  <button class="btn btn-sm btn-danger ms-2 minus">-</button>
-  <button class="btn btn-sm btn-warning ms-2 reset">اعاده</button>
-</td>
+            <td>${name}</td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-success me-2 plus">+</button>
+              <span class="score fw-bold">${score}</span>
+              <button class="btn btn-sm btn-danger ms-2 minus">-</button>
+              <button class="btn btn-sm btn-warning ms-2 reset">إعادة</button>
+            </td>
           `;
           tableBody.appendChild(tr);
 
+          const scoreEl = tr.querySelector(".score");
+
           // زر + 
           tr.querySelector(".plus").addEventListener("click", async () => {
-            const scoreEl = tr.querySelector(".score");
             let newScore = parseInt(scoreEl.textContent) + 1;
             scoreEl.textContent = newScore;
             await setDoc(doc(db, "quiz_scores", name), { name, score: newScore }, { merge: true });
@@ -126,9 +129,15 @@
 
           // زر - 
           tr.querySelector(".minus").addEventListener("click", async () => {
-            const scoreEl = tr.querySelector(".score");
             let newScore = parseInt(scoreEl.textContent) - 1;
             if (newScore < 0) newScore = 0;
+            scoreEl.textContent = newScore;
+            await setDoc(doc(db, "quiz_scores", name), { name, score: newScore }, { merge: true });
+          });
+
+          // زر إعادة
+          tr.querySelector(".reset").addEventListener("click", async () => {
+            let newScore = 0;
             scoreEl.textContent = newScore;
             await setDoc(doc(db, "quiz_scores", name), { name, score: newScore }, { merge: true });
           });
@@ -142,4 +151,3 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
