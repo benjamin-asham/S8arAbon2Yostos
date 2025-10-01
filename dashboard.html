@@ -112,7 +112,7 @@
               <button class="btn btn-sm btn-success me-2 plus">+</button>
               <span class="score fw-bold">${score}</span>
               <button class="btn btn-sm btn-danger ms-2 minus">-</button>
-              <button class="btn btn-sm btn-warning ms-2 reset">تصفير</button>
+              <button class="btn btn-sm btn-warning ms-2 reset">Reset</button>
             </td>
           `;
           tableBody.appendChild(tr);
@@ -135,11 +135,11 @@
           });
 
           // زر تصفير Reset (score = 0)
-          tr.querySelector(".reset").addEventListener("click", async () => {
-            scoreEl.textContent = 0;
-            await setDoc(doc(db, "quiz_scores", name), { name, score: 0 }, { merge: true });
-            alert(`تم تصفير النقاط لـ ${name} ✅`);
-          });
+// زر Reset (إعادة العداد فقط بدون مسح النقاط)
+tr.querySelector(".reset").addEventListener("click", async () => {
+  await setDoc(doc(db, "quiz_scores", name), { lastPlayed: null }, { merge: true });
+  alert(`تم إعادة العداد لـ ${name} ✅ دلوقتي يقدر يحل المسابقة من جديد`);
+});
         });
       });
     }
@@ -150,3 +150,4 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
