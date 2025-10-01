@@ -111,13 +111,15 @@ async function saveScore(studentName, score) {
     const snap = await getDoc(ref);
 
     let newScore = score;
+
+    // 👇 لو فيه نقاط قديمة، نجمع عليها
     if (snap.exists() && snap.data().score) {
-      newScore += snap.data().score;  // نجمع النقاط القديمة + الجديدة
+      newScore += snap.data().score;
     }
 
     await setDoc(ref, { 
       name: studentName, 
-      score: newScore,
+      score: newScore,            // مجموع القديم + الجديد
       lastPlayed: new Date().toISOString()
     }, { merge: true });
 
@@ -125,6 +127,7 @@ async function saveScore(studentName, score) {
     console.error("حدث خطأ في الحفظ:", e);
   }
 }
+
 
 async function canPlay(studentName) {
   const ref = doc(db, "quiz_scores", studentName);
@@ -258,6 +261,7 @@ document.addEventListener("DOMContentLoaded", () => {
   startOnScroll();
   loadTopScoresRealtime();
 });
+
 
 
 
