@@ -112,7 +112,7 @@
               <button class="btn btn-sm btn-success me-2 plus">+</button>
               <span class="score fw-bold">${score}</span>
               <button class="btn btn-sm btn-danger ms-2 minus">-</button>
-              <button class="btn btn-sm btn-warning ms-2 reset">إعادة</button>
+              <button class="btn btn-sm btn-warning ms-2 reset">تصفير</button>
             </td>
           `;
           tableBody.appendChild(tr);
@@ -134,10 +134,11 @@
             await setDoc(doc(db, "quiz_scores", name), { name, score: newScore }, { merge: true });
           });
 
-          // زر إعادة (Reset 7 أيام فقط بدون تصفير النقاط)
+          // زر تصفير Reset (score = 0)
           tr.querySelector(".reset").addEventListener("click", async () => {
-            await setDoc(doc(db, "quiz_scores", name), { lastPlayed: null }, { merge: true });
-            alert(`تم إعادة تفعيل المسابقة لـ ${name} ✅`);
+            scoreEl.textContent = 0;
+            await setDoc(doc(db, "quiz_scores", name), { name, score: 0 }, { merge: true });
+            alert(`تم تصفير النقاط لـ ${name} ✅`);
           });
         });
       });
